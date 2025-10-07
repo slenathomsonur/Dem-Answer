@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Educational Computer | 2025 Dem Studios</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background: #003366;
+            color: #33ff33;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .retro-computer {
+            background: #000;
+            border: 4px solid #666;
+            border-radius: 10px;
+            margin: 20px;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            position: relative;
+        }
+        
+        .screen-border {
+            background: #333;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .screen {
+            background: #001100;
+            border: 2px solid #33ff33;
+            border-radius: 5px;
+            flex-grow: 1;
+            padding: 15px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #33ff33;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #33ff33;
+            text-shadow: 0 0 5px #33ff33;
+        }
+        
+        .datetime {
+            font-size: 14px;
+            color: #33ff33;
+        }
+        
+        .desktop {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 80px);
+            grid-gap: 20px;
+            justify-content: start;
+            flex-grow: 1;
+        }
+        
+        .app-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            width: 80px;
+            padding: 10px 5px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .app-icon:hover {
+            background: rgba(51, 255, 51, 0.2);
+        }
+        
+        .app-icon.selected {
+            background: rgba(51, 255, 51, 0.3);
+        }
+        
+        .app-icon img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            filter: brightness(0) invert(0.7);
+        }
+        
+        .app-name {
+            font-size: 12px;
+            text-align: center;
+            color: #33ff33;
+        }
+        
+        .app-window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 70%;
+            background: #001100;
+            border: 2px solid #33ff33;
+            border-radius: 5px;
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+        
+        .app-header {
+            background: #003300;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #33ff33;
+        }
+        
+        .app-title {
+            font-weight: bold;
+            color: #33ff33;
+        }
+        
+        .close-btn {
+            background: #ff3333;
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .app-content {
+            flex-grow: 1;
+            padding: 15px;
+            overflow: auto;
+        }
+        
+        .calculator-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .calculator-display {
+            background: #000;
+            border: 1px solid #33ff33;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 24px;
+            text-align: right;
+            min-height: 40px;
+            color: #33ff33;
+        }
+        
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            flex-grow: 1;
+        }
+        
+        .calc-btn {
+            background: #003300;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+        
+        .calc-btn:hover {
+            background: #004400;
+        }
+        
+        .calc-btn.operator {
+            background: #005500;
+        }
+        
+        .calc-btn.equals {
+            background: #007700;
+        }
+        
+        .algebra-solver {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .algebra-input {
+            background: #000;
+            border: 1px solid #33ff33;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #33ff33;
+        }
+        
+        .algebra-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .algebra-btn {
+            background: #003300;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+        
+        .algebra-btn:hover {
+            background: #004400;
+        }
+        
+        .solve-btn {
+            background: #007700;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 3px;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+        
+        .solve-btn:hover {
+            background: #008800;
+        }
+        
+        .algebra-result {
+            background: #000;
+            border: 1px solid #33ff33;
+            padding: 10px;
+            flex-grow: 1;
+            font-size: 16px;
+            color: #33ff33;
+            overflow: auto;
+        }
+        
+        .calendar-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .calendar-nav {
+            background: #003300;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        
+        .calendar-month {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 5px;
+            flex-grow: 1;
+        }
+        
+        .calendar-day {
+            background: #002200;
+            border: 1px solid #33ff33;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .calendar-day.header {
+            background: #004400;
+            font-weight: bold;
+        }
+        
+        .calendar-day.update {
+            background: #005500;
+            position: relative;
+        }
+        
+        .calendar-day.update::after {
+            content: "UPDATE";
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 8px;
+            color: #33ff33;
+        }
+        
+        .update-log {
+            margin-top: 15px;
+            border-top: 1px solid #33ff33;
+            padding-top: 10px;
+        }
+        
+        .update-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #002200;
+            border-radius: 3px;
+        }
+        
+        .update-date {
+            font-weight: bold;
+            color: #33ff33;
+        }
+        
+        .update-desc {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .taskbar {
+            background: #003300;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #33ff33;
+        }
+        
+        .start-button {
+            background: #007700;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            padding: 5px 15px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        
+        .notification {
+            position: absolute;
+            bottom: 50px;
+            right: 20px;
+            background: #002200;
+            border: 1px solid #33ff33;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 300px;
+            display: none;
+            z-index: 20;
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .notification-close {
+            background: #ff3333;
+            color: white;
+            border: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+        }
+        
+        .uninstall-confirm {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #001100;
+            border: 2px solid #33ff33;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 30;
+            display: none;
+            max-width: 400px;
+        }
+        
+        .uninstall-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .uninstall-btn {
+            padding: 8px 15px;
+            border: 1px solid #33ff33;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .uninstall-confirm-btn {
+            background: #770000;
+            color: #33ff33;
+        }
+        
+        .uninstall-cancel-btn {
+            background: #003300;
+            color: #33ff33;
+        }
+        
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="retro-computer">
+        <div class="scanlines"></div>
+        
+        <div class="screen-border">
+            <div class="screen">
+                <div class="header">
+                    <div class="logo">EDUCATIONAL COMPUTER SYSTEM</div>
+                    <div class="datetime" id="datetime">LOADING...</div>
+                </div>
+                
+                <div class="desktop" id="desktop">
+                    <!-- App icons will be added here by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="taskbar">
+            <div class="start-button" id="startButton">START</div>
+            <div id="activeApp">No active applications</div>
+        </div>
+        
+        <!-- Calculator App -->
+        <div class="app-window" id="calculatorApp">
+            <div class="app-header">
+                <div class="app-title">Calculator</div>
+                <button class="close-btn" data-app="calculator">×</button>
+            </div>
+            <div class="app-content">
+                <div class="calculator-container">
+                    <div class="calculator-display" id="calcDisplay">0</div>
+                    <div class="calculator-buttons">
+                        <button class="calc-btn" onclick="clearDisplay()">C</button>
+                        <button class="calc-btn" onclick="deleteLast()">⌫</button>
+                        <button class="calc-btn operator" onclick="appendToDisplay('/')">/</button>
+                        <button class="calc-btn operator" onclick="appendToDisplay('*')">×</button>
+                        
+                        <button class="calc-btn" onclick="appendToDisplay('7')">7</button>
+                        <button class="calc-btn" onclick="appendToDisplay('8')">8</button>
+                        <button class="calc-btn" onclick="appendToDisplay('9')">9</button>
+                        <button class="calc-btn operator" onclick="appendToDisplay('-')">-</button>
+                        
+                        <button class="calc-btn" onclick="appendToDisplay('4')">4</button>
+                        <button class="calc-btn" onclick="appendToDisplay('5')">5</button>
+                        <button class="calc-btn" onclick="appendToDisplay('6')">6</button>
+                        <button class="calc-btn operator" onclick="appendToDisplay('+')">+</button>
+                        
+                        <button class="calc-btn" onclick="appendToDisplay('1')">1</button>
+                        <button class="calc-btn" onclick="appendToDisplay('2')">2</button>
+                        <button class="calc-btn" onclick="appendToDisplay('3')">3</button>
+                        <button class="calc-btn equals" onclick="calculate()" rowspan="2">=</button>
+                        
+                        <button class="calc-btn" onclick="appendToDisplay('0')" colspan="2">0</button>
+                        <button class="calc-btn" onclick="appendToDisplay('.')">.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Algebra Solver App -->
+        <div class="app-window" id="algebraApp">
+            <div class="app-header">
+                <div class="app-title">Algebra Solver</div>
+                <button class="close-btn" data-app="algebra">×</button>
+            </div>
+            <div class="app-content">
+                <div class="algebra-solver">
+                    <input type="text" class="algebra-input" id="algebraInput" placeholder="Enter equation (e.g., 2x + 5 = 13)">
+                    <div class="algebra-buttons">
+                        <button class="algebra-btn" onclick="insertAlgebraChar('x')">x</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar('y')">y</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar('^')">^</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar('√')">√</button>
+                        
+                        <button class="algebra-btn" onclick="insertAlgebraChar('(')">(</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar(')')">)</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar('+')">+</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar('-')">-</button>
+                        
+                        <button class="algebra-btn" onclick="insertAlgebraChar('*')">*</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar('/')">/</button>
+                        <button class="algebra-btn" onclick="insertAlgebraChar('=')">=</button>
+                        <button class="algebra-btn" onclick="clearAlgebra()">C</button>
+                    </div>
+                    <button class="solve-btn" onclick="solveAlgebra()">SOLVE</button>
+                    <div class="algebra-result" id="algebraResult">
+                        Enter an equation and click SOLVE
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calendar App -->
+        <div class="app-window" id="calendarApp">
+            <div class="app-header">
+                <div class="app-title">Update Calendar</div>
+                <button class="close-btn" data-app="calendar">×</button>
+            </div>
+            <div class="app-content">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav" id="prevMonth">←</button>
+                        <div class="calendar-month" id="currentMonth">Month Year</div>
+                        <button class="calendar-nav" id="nextMonth">→</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+                    <div class="update-log">
+                        <h3>Update History</h3>
+                        <div id="updateLog">
+                            <!-- Update log will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notification -->
+        <div class="notification" id="notification">
+            <div class="notification-header">
+                <div class="notification-title">System Notification</div>
+                <button class="notification-close" id="notificationClose">×</button>
+            </div>
+            <div class="notification-content" id="notificationContent">
+                Notification content
+            </div>
+        </div>
+        
+        <!-- Uninstall Confirmation -->
+        <div class="uninstall-confirm" id="uninstallConfirm">
+            <h3>Confirm Uninstall</h3>
+            <p>Are you sure you want to uninstall <span id="uninstallAppName">APP</span>? This action cannot be undone and the application will be permanently removed from your system.</p>
+            <div class="uninstall-buttons">
+                <button class="uninstall-btn uninstall-cancel-btn" id="uninstallCancel">CANCEL</button>
+                <button class="uninstall-btn uninstall-confirm-btn" id="uninstallConfirmBtn">UNINSTALL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // System state
+        const systemState = {
+            installedApps: ['calculator', 'algebra', 'calendar'],
+            deletedApps: [],
+            lastUpdateCheck: localStorage.getItem('lastUpdateCheck') || null,
+            updates: [
+                { date: '2025-01-06', description: 'Initial system release with calculator and algebra solver' },
+                { date: '2025-01-10', description: 'Added calendar with update tracking' },
+                { date: '2025-01-13', description: 'Improved algebra solver with equation parsing' },
+                { date: '2025-01-17', description: 'Added app uninstall functionality' }
+            ],
+            currentTheme: localStorage.getItem('currentTheme') || 'default'
+        };
+        
+        // Initialize the system
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            loadDesktop();
+            setupCalendar();
+            checkForUpdates();
+            setupEventListeners();
+            
+            // Apply saved theme
+            applyTheme(systemState.currentTheme);
+        });
+        
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'short', 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('datetime').textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        function loadDesktop() {
+            const desktop = document.getElementById('desktop');
+            desktop.innerHTML = '';
+            
+            const apps = [
+                { id: 'calculator', name: 'Calculator', icon: '🔢' },
+                { id: 'algebra', name: 'Algebra Solver', icon: '𝑥' },
+                { id: 'calendar', name: 'Update Calendar', icon: '📅' }
+            ];
+            
+            apps.forEach(app => {
+                if (!systemState.deletedApps.includes(app.id)) {
+                    const appIcon = document.createElement('div');
+                    appIcon.className = 'app-icon';
+                    appIcon.setAttribute('data-app', app.id);
+                    appIcon.innerHTML = `
+                        <div style="font-size: 36px; margin-bottom: 5px;">${app.icon}</div>
+                        <div class="app-name">${app.name}</div>
+                    `;
+                    
+                    appIcon.addEventListener('click', function() {
+                        openApp(app.id);
+                    });
+                    
+                    // Add right-click context menu for uninstall
+                    appIcon.addEventListener('contextmenu', function(e) {
+                        e.preventDefault();
+                        showUninstallConfirm(app.id, app.name);
+                    });
+                    
+                    desktop.appendChild(appIcon);
+                }
+            });
+        }
+        
+        function openApp(appId) {
+            // Close all apps first
+            document.querySelectorAll('.app-window').forEach(app => {
+                app.style.display = 'none';
+            });
+            
+            // Open the selected app
+            const appWindow = document.getElementById(appId + 'App');
+            if (appWindow) {
+                appWindow.style.display = 'flex';
+                document.getElementById('activeApp').textContent = `Running: ${appId.charAt(0).toUpperCase() + appId.slice(1)}`;
+            }
+            
+            // Update selected app icon
+            document.querySelectorAll('.app-icon').forEach(icon => {
+                icon.classList.remove('selected');
+            });
+            document.querySelector(`.app-icon[data-app="${appId}"]`).classList.add('selected');
+        }
+        
+        function closeApp(appId) {
+            const appWindow = document.getElementById(appId + 'App');
+            if (appWindow) {
+                appWindow.style.display = 'none';
+                document.getElementById('activeApp').textContent = 'No active applications';
+                
+                // Remove selected state from icon
+                document.querySelectorAll('.app-icon').forEach(icon => {
+                    icon.classList.remove('selected');
+                });
+            }
+        }
+        
+        function setupEventListeners() {
+            // Close buttons
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const appId = this.getAttribute('data-app');
+                    closeApp(appId);
+                });
+            });
+            
+            // Start button
+            document.getElementById('startButton').addEventListener('click', function() {
+                showNotification('System', 'Welcome to Educational Computer System v2.1');
+            });
+            
+            // Notification close
+            document.getElementById('notificationClose').addEventListener('click', function() {
+                document.getElementById('notification').style.display = 'none';
+            });
+            
+            // Uninstall buttons
+            document.getElementById('uninstallCancel').addEventListener('click', function() {
+                document.getElementById('uninstallConfirm').style.display = 'none';
+            });
+            
+            document.getElementById('uninstallConfirmBtn').addEventListener('click', function() {
+                const appId = document.getElementById('uninstallConfirm').getAttribute('data-app');
+                uninstallApp(appId);
+                document.getElementById('uninstallConfirm').style.display = 'none';
+            });
+            
+            // Calendar navigation
+            document.getElementById('prevMonth').addEventListener('click', function() {
+                changeMonth(-1);
+            });
+            
+            document.getElementById('nextMonth').addEventListener('click', function() {
+                changeMonth(1);
+            });
+        }
+        
+        function showUninstallConfirm(appId, appName) {
+            document.getElementById('uninstallAppName').textContent = appName;
+            document.getElementById('uninstallConfirm').setAttribute('data-app', appId);
+            document.getElementById('uninstallConfirm').style.display = 'block';
+        }
+        
+        function uninstallApp(appId) {
+            if (!systemState.deletedApps.includes(appId)) {
+                systemState.deletedApps.push(appId);
+                closeApp(appId);
+                loadDesktop();
+                showNotification('System', `${appId.charAt(0).toUpperCase() + appId.slice(1)} has been uninstalled`);
+                
+                // Save to localStorage
+                localStorage.setItem('deletedApps', JSON.stringify(systemState.deletedApps));
+            }
+        }
+        
+        function showNotification(title, content) {
+            document.getElementById('notificationContent').textContent = content;
+            document.getElementById('notification').style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(function() {
+                document.getElementById('notification').style.display = 'none';
+            }, 5000);
+        }
+        
+        function checkForUpdates() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Check if it's Monday or Friday
+            const dayOfWeek = new Date().getDay();
+            const isUpdateDay = dayOfWeek === 1 || dayOfWeek === 5; // 1 is Monday, 5 is Friday
+            
+            if (isUpdateDay && systemState.lastUpdateCheck !== today) {
+                showNotification('System Update', 'New updates are available! Check the Update Calendar for details.');
+                systemState.lastUpdateCheck = today;
+                localStorage.setItem('lastUpdateCheck', today);
+                
+                // Apply a random theme change on update days
+                const themes = ['default', 'blue', 'amber', 'matrix'];
+                const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+                applyTheme(randomTheme);
+                systemState.currentTheme = randomTheme;
+                localStorage.setItem('currentTheme', randomTheme);
+            }
+        }
+        
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            
+            // Reset to default first
+            document.body.style.background = '#003366';
+            document.body.style.color = '#33ff33';
+            
+            switch(theme) {
+                case 'blue':
+                    document.body.style.background = '#000033';
+                    document.body.style.color = '#66ccff';
+                    break;
+                case 'amber':
+                    document.body.style.background = '#331100';
+                    document.body.style.color = '#ffaa00';
+                    break;
+                case 'matrix':
+                    document.body.style.background = '#001100';
+                    document.body.style.color = '#00ff00';
+                    break;
+                // default theme is already set
+            }
+        }
+        
+        // Calendar functions
+        let currentCalendarDate = new Date();
+        
+        function setupCalendar() {
+            renderCalendar(currentCalendarDate);
+            renderUpdateLog();
+        }
+        
+        function renderCalendar(date) {
+            const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            document.getElementById('currentMonth').textContent = monthYear;
+            
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+            
+            // Add day headers
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day header';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                // Check if this day has an update
+                const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                const hasUpdate = systemState.updates.some(update => update.date === dateString);
+                
+                if (hasUpdate) {
+                    dayElement.classList.add('update');
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+        
+        function changeMonth(direction) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
+            renderCalendar(currentCalendarDate);
+        }
+        
+        function renderUpdateLog() {
+            const updateLog = document.getElementById('updateLog');
+            updateLog.innerHTML = '';
+            
+            // Sort updates by date (newest first)
+            const sortedUpdates = [...systemState.updates].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedUpdates.forEach(update => {
+                const updateItem = document.createElement('div');
+                updateItem.className = 'update-item';
+                
+                const updateDate = document.createElement('div');
+                updateDate.className = 'update-date';
+                updateDate.textContent = new Date(update.date).toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                const updateDesc = document.createElement('div');
+                updateDesc.className = 'update-desc';
+                updateDesc.textContent = update.description;
+                
+                updateItem.appendChild(updateDate);
+                updateItem.appendChild(updateDesc);
+                updateLog.appendChild(updateItem);
+            });
+        }
+        
+        // Calculator functions
+        let calcDisplay = document.getElementById('calcDisplay');
+        
+        function appendToDisplay(value) {
+            if (calcDisplay.textContent === '0' || calcDisplay.textContent === 'Error') {
+                calcDisplay.textContent = value;
+            } else {
+                calcDisplay.textContent += value;
+            }
+        }
+        
+        function clearDisplay() {
+            calcDisplay.textContent = '0';
+        }
+        
+        function deleteLast() {
+            if (calcDisplay.textContent.length > 1) {
+                calcDisplay.textContent = calcDisplay.textContent.slice(0, -1);
+            } else {
+                calcDisplay.textContent = '0';
+            }
+        }
+        
+        function calculate() {
+            try {
+                // Replace × with * for evaluation
+                let expression = calcDisplay.textContent.replace(/×/g, '*');
+                calcDisplay.textContent = eval(expression);
+            } catch (error) {
+                calcDisplay.textContent = 'Error';
+            }
+        }
+        
+        // Algebra solver functions
+        function insertAlgebraChar(char) {
+            const input = document.getElementById('algebraInput');
+            input.value += char;
+        }
+        
+        function clearAlgebra() {
+            document.getElementById('algebraInput').value = '';
+            document.getElementById('algebraResult').textContent = 'Enter an equation and click SOLVE';
+        }
+        
+        function solveAlgebra() {
+            const equation = document.getElementById('algebraInput').value;
+            const resultElement = document.getElementById('algebraResult');
+            
+            if (!equation) {
+                resultElement.textContent = 'Please enter an equation';
+                return;
+            }
+            
+            // Simple equation solver for demonstration
+            // This would be much more complex in a real application
+            try {
+                if (equation.includes('=')) {
+                    const sides = equation.split('=');
+                    if (sides.length !== 2) {
+                        resultElement.textContent = 'Invalid equation format';
+                        return;
+                    }
+                    
+                    // Very basic linear equation solver for demo
+                    if (equation.includes('x')) {
+                        // Simple case: ax + b = c
+                        const left = sides[0].trim();
+                        const right = sides[1].trim();
+                        
+                        // Extract coefficients (this is a simplified approach)
+                        let a = 0, b = 0;
+                        
+                        // Parse left side
+                        if (left.includes('x')) {
+                            const xParts = left.split('x');
+                            if (xParts[0].trim() === '' || xParts[0].trim() === '+') {
+                                a = 1;
+                            } else if (xParts[0].trim() === '-') {
+                                a = -1;
+                            } else {
+                                a = parseFloat(xParts[0]);
+                            }
+                            
+                            if (xParts[1]) {
+                                b = parseFloat(xParts[1]) || 0;
+                            }
+                        } else {
+                            b = parseFloat(left) || 0;
+                        }
+                        
+                        const c = parseFloat(right) || 0;
+                        
+                        if (a === 0) {
+                            resultElement.textContent = 'No solution or infinite solutions';
+                        } else {
+                            const solution = (c - b) / a;
+                            resultElement.textContent = `Solution: x = ${solution}`;
+                        }
+                    } else {
+                        resultElement.textContent = 'Equation solved (simplified solver)';
+                    }
+                } else {
+                    resultElement.textContent = 'Please include an equals sign (=) in your equation';
+                }
+            } catch (error) {
+                resultElement.textContent = 'Error solving equation. Please check your input.';
+            }
+        }
+        
+        // Load deleted apps from localStorage
+        const savedDeletedApps = localStorage.getItem('deletedApps');
+        if (savedDeletedApps) {
+            systemState.deletedApps = JSON.parse(savedDeletedApps);
+        }
+    </script>
+</body>
+</html>
